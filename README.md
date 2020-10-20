@@ -1,0 +1,4 @@
+# guu
+
+Tiny browser logger.
+
