@@ -6,15 +6,11 @@ type LoggerArgs = {
   color: string;
 };
 
-
 interface Logger {
-  <T>(arg: T): T;
+  (message: string, logLevel?: string): void;
 }
 
-const consoleObj: Record<string, any> = console
-
-
-
+const consoleObj: Record<string, any> = console;
 
 const loggerCache: Record<string, Logger> = {};
 
@@ -22,8 +18,6 @@ const ALL_LEVELS = '*';
 
 const rawLogLevel = process.env.PPRMNT_LOG || ALL_LEVELS;
 const logLevel = rawLogLevel.split(',');
-
-
 
 const getSecondsToday = (): number => {
   const now: Date = new Date();
@@ -46,13 +40,13 @@ const getNameSpace = (namespace: string, color: string) => [
   `color: ${color}; font-weight: bold;`,
 ];
 
-const logMessageLevels: Record<string,string> = {
+const logMessageLevels: Record<string, string> = {
   error: `color: red; font-weight: bold;`,
   info: `color: white;`,
   warn: `color: goldenrod;`,
 };
 
-const consoleMethods: Record<string,string> = {
+const consoleMethods: Record<string, string> = {
   warn: 'warn',
   info: 'log',
   error: 'error',
@@ -60,7 +54,6 @@ const consoleMethods: Record<string,string> = {
 };
 
 /* eslint-disable no-console */
-
 
 const buildLogger = ({ namespace, color }: LoggerArgs) => {
   const [timestampString, timestampStyle] = getTimeStamp();
@@ -72,9 +65,8 @@ const buildLogger = ({ namespace, color }: LoggerArgs) => {
   // return noop if not included in loglevel
   if (!isIncluded) return () => {};
 
-
-
-  const log = (message: string, logLevel: string = 'info'): Logger => {
+  const log: Logger = (message: string, logLevel?: string) => {
+    logLevel = logLevel || 'info';
     const logMessageStyle = logMessageLevels[logLevel];
     const logMessageString = `%c${message}`;
     let method: string = consoleMethods[logLevel];
@@ -90,7 +82,7 @@ const buildLogger = ({ namespace, color }: LoggerArgs) => {
     }
 
     if (logLevel === 'error') {
-      const err: Error = <Error><unknown>message
+      const err: Error = <Error>(<unknown>message);
       console.error(err);
       console.trace(err.stack);
       message = JSON.stringify(err);
@@ -99,13 +91,14 @@ const buildLogger = ({ namespace, color }: LoggerArgs) => {
     const logFn = consoleObj[method];
     logFn(...logString, ...logStyles);
   };
+
   loggerCache[namespace] = log;
   return log;
 };
 
-const timerCache = {};
+const timerCache: Record<string, any> = {};
 
-export const timer = id => {
+export const timer = (id: string) => {
   const start = () => {
     const crumbs = [];
     const stamp = new Date().valueOf();
@@ -115,7 +108,7 @@ export const timer = id => {
     timerCache[id] = crumbs;
   };
 
-  const crumb = name: string => {
+  const crumb = (name: string) => {
     const crumbs = timerCache[id];
     const stamp = new Date().valueOf();
     const { stamp: start } = crumbs[0];
@@ -143,7 +136,7 @@ export const timer = id => {
 
 /* eslint-enable no-console */
 
-export const logger = (namespace, color) => {
+export const logger = (namespace: string, color: string) => {
   if (loggerCache[namespace]) return loggerCache[namespace];
   return buildLogger({ namespace, color });
 };
