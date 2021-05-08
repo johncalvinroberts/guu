@@ -10,6 +10,8 @@ const namespaceLevel = rawLogNamespaceLevel.split(',');
 const rawLogLevel = process?.env?.GUU_LOG_LEVELS || ALL_LEVELS;
 const logLevel = rawLogLevel.split(',');
 
+const LOG_ALL: boolean = logLevel.includes(ALL_LEVELS);
+
 const getNameSpace = (namespace: string, color: string): string[] => [
   `%c[${namespace}]`,
   `color: ${color}; font-weight: bold;`,
@@ -214,24 +216,45 @@ export class LoggerFactory implements Interface<Logger> {
   }
 
   log(args: Message) {
+    if (!logLevel.includes(ConsoleMethodEnum.log) || !LOG_ALL) {
+      return;
+    }
     return this.instance.log(args);
   }
   trace(args: Message) {
+    if (!logLevel.includes(ConsoleMethodEnum.trace) || !LOG_ALL) {
+      return;
+    }
     return this.instance.trace(args);
   }
   error(args: Message) {
+    if (!logLevel.includes(ConsoleMethodEnum.error) || !LOG_ALL) {
+      return;
+    }
     return this.instance.error(args);
   }
   info(args: Message) {
+    if (!logLevel.includes(ConsoleMethodEnum.info) || !LOG_ALL) {
+      return;
+    }
     return this.instance.info(args);
   }
   warn(args: Message) {
+    if (!logLevel.includes(ConsoleMethodEnum.warn) || !LOG_ALL) {
+      return;
+    }
     return this.instance.warn(args);
   }
   table(args: Message) {
+    if (!logLevel.includes(ConsoleMethodEnum.table) || !LOG_ALL) {
+      return;
+    }
     return this.instance.table(args);
   }
   debug(args: Message) {
+    if (!logLevel.includes(ConsoleMethodEnum.debug) || !LOG_ALL) {
+      return;
+    }
     return this.instance.debug(args);
   }
 }
