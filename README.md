@@ -1,6 +1,7 @@
 # guu
 [![Blazing Fast](https://badgen.now.sh/badge/speed/blazing%20%F0%9F%94%A5/green)](https://npm.im/tsdx) 
 [![Node version](https://img.shields.io/node/v/guu.svg?style=flat)](http://nodejs.org/download/)
+[![npm version](https://badge.fury.io/js/guu.svg)](https://badge.fury.io/js/guu)
 [![Minified bundle size](https://badgen.net/bundlephobia/min/guu)](https://www.npmjs.com/package/guu)
 [![gzipped bundle size](https://badgen.net/bundlephobia/minzip/guu)](https://www.npmjs.com/package/guu)
 
@@ -69,3 +70,9 @@ crumb('did something heavier');
 stop();
 // prints profile of how long each operation took
 ```
+
+## Log Levels
+
+`guu` looks for two environment variables during bundle time
+* `GUU_LOG_NAMESPACES` - defaults to `*`, functions as a comma-seperated "allow list" when present. Example: `router,utils`
+* `GUU_LOG_LEVELS` - defaults to `*`, functions as a comma-seperated "allow list" when present. Example: `error,debug`

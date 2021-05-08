@@ -5,7 +5,9 @@ const loggerCache: Record<string, Logger> = {};
 const timerCache: Record<string, any> = {};
 
 const ALL_LEVELS = '*';
-const rawLogLevel = process?.env?.GUU_LOG_LEVEL || ALL_LEVELS;
+const rawLogNamespaceLevel = process?.env?.GUU_LOG_NAMESPACES || ALL_LEVELS;
+const namespaceLevel = rawLogNamespaceLevel.split(',');
+const rawLogLevel = process?.env?.GUU_LOG_LEVELS || ALL_LEVELS;
 const logLevel = rawLogLevel.split(',');
 
 const getNameSpace = (namespace: string, color: string): string[] => [
@@ -102,13 +104,10 @@ export class TimerFactory implements Interface<Timer> {
 export class Logger {
   private namespaceStyle: string;
   private namespaceString: string;
-  private isSilent: boolean;
   constructor(namespace: string, color: string) {
     const [namespaceString, namespaceStyle] = getNameSpace(namespace, color);
     this.namespaceString = namespaceString;
     this.namespaceStyle = namespaceStyle;
-    this.isSilent =
-      logLevel.includes(ALL_LEVELS) || logLevel.includes(namespace);
   }
 
   private buildLogString(message: string, timestampString: string): string[] {
@@ -144,16 +143,10 @@ export class Logger {
   }
 
   public log(message: Message) {
-    if (this.isSilent) {
-      return;
-    }
     return this.executeLog(message, ConsoleMethodEnum.log);
   }
 
   public error(message: Message) {
-    if (this.isSilent) {
-      return;
-    }
     return this.executeLog(
       message,
       ConsoleMethodEnum.log,
@@ -162,9 +155,6 @@ export class Logger {
   }
 
   public warn(message: Message) {
-    if (this.isSilent) {
-      return;
-    }
     return this.executeLog(
       message,
       ConsoleMethodEnum.log,
@@ -173,9 +163,6 @@ export class Logger {
   }
 
   public info(message: Message) {
-    if (this.isSilent) {
-      return;
-    }
     return this.executeLog(
       message,
       ConsoleMethodEnum.log,
@@ -184,16 +171,10 @@ export class Logger {
   }
 
   public trace(message: Message) {
-    if (this.isSilent) {
-      return;
-    }
     return this.executeLog(message, ConsoleMethodEnum.trace);
   }
 
   public debug(message: Message) {
-    if (this.isSilent) {
-      return;
-    }
     return this.executeLog(message, ConsoleMethodEnum.debug);
   }
 
@@ -202,16 +183,34 @@ export class Logger {
   }
 }
 
-export class LoggerFactory implements Interface<Logger> {
-  instance: Logger;
+class DecoyLogger implements Interface<Logger> {
+  table() {}
+  debug() {}
+  log() {}
+  info() {}
+  warn() {}
+  error() {}
+  trace() {}
+}
 
+export class LoggerFactory implements Interface<Logger> {
+  instance: Logger | DecoyLogger;
+  isSilent: boolean;
   constructor(namespace: string, color: string) {
-    if (loggerCache[namespace]) {
-      this.instance = loggerCache[namespace];
-    } else {
-      this.instance = new Logger(namespace, color);
-      loggerCache[namespace] = this.instance;
+    const isSilent =
+      !namespaceLevel.includes(ALL_LEVELS) &&
+      !namespaceLevel.includes(namespace);
+    let instance: Logger | DecoyLogger = loggerCache[namespace];
+
+    if (instance && !isSilent) {
+      instance = new Logger(namespace, color);
     }
+
+    if (isSilent) {
+      instance = new DecoyLogger();
+    }
+    this.isSilent = isSilent;
+    this.instance = instance;
   }
 
   log(args: Message) {
