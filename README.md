@@ -26,7 +26,7 @@ Each time you instantiate `guu`, you can specify the namespace and a color.
 import guu from 'guu'
 
 const log = new guu('main', '#3e3240');
-log('hello world');
+log.info('hello world');
 // prints pretty log
 ```
 
@@ -57,9 +57,9 @@ try {
 `guu` also has a built i timer util, for profiling things in your code.
 
 ```js
-import { timer } from 'guu';
+import { TimerFactory } from 'guu';
 
-const {start, stop, crumb} = new timer('Some Process');
+const {start, stop, crumb} = new TimerFactory('Some Process');
 
 start();
 doSomethingHeavy();

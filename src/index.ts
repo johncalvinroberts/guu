@@ -30,6 +30,7 @@ enum ConsoleMethodEnum {
   error = 'error',
   table = 'table',
   trace = 'trace',
+  debug = 'debug',
 }
 
 type Message = string[] | unknown[];
@@ -189,6 +190,13 @@ export class Logger {
     return this.executeLog(message, ConsoleMethodEnum.trace);
   }
 
+  public debug(message: Message) {
+    if (this.isSilent) {
+      return;
+    }
+    return this.executeLog(message, ConsoleMethodEnum.debug);
+  }
+
   public table(message: Message) {
     return this.executeLog(message, ConsoleMethodEnum.table);
   }
@@ -223,6 +231,9 @@ export class LoggerFactory implements Interface<Logger> {
   }
   table(args: Message) {
     return this.instance.table(args);
+  }
+  debug(args: Message) {
+    return this.instance.debug(args);
   }
 }
 
