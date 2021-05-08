@@ -17,9 +17,9 @@
     "lint": "tsdx lint",
     "prepare": "tsdx build",
     "size": "size-limit",
-    "analyze": "size-limit --why"
+    "analyze": "size-limit --why",
+    "type-check": "tsc --pretty --noEmit"
   },
-  "peerDependencies": {},
   "husky": {
     "hooks": {
       "pre-commit": "tsdx lint"
@@ -37,19 +37,20 @@
   "size-limit": [
     {
       "path": "dist/guu.cjs.production.min.js",
-      "limit": "10 KB"
+      "limit": "1 KB"
     },
     {
       "path": "dist/guu.esm.js",
-      "limit": "10 KB"
+      "limit": "1 KB"
     }
   ],
+  "peerDependencies": {},
   "devDependencies": {
     "@size-limit/preset-small-lib": "^4.6.0",
     "husky": "^4.3.0",
     "size-limit": "^4.6.0",
     "tsdx": "^0.14.1",
-    "tslib": "^2.0.3",
-    "typescript": "^4.0.3"
+    "tslib": "^2.2.0",
+    "typescript": "^4.2.4"
   }
 }
