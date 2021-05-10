@@ -1,6 +1,5 @@
 # guu
 [![Blazing Fast](https://badgen.now.sh/badge/speed/blazing%20%F0%9F%94%A5/green)](https://npm.im/tsdx) 
-[![Node version](https://img.shields.io/node/v/guu.svg?style=flat)](http://nodejs.org/download/)
 [![npm version](https://badge.fury.io/js/guu.svg)](https://badge.fury.io/js/guu)
 [![Minified bundle size](https://badgen.net/bundlephobia/min/guu)](https://www.npmjs.com/package/guu)
 [![gzipped bundle size](https://badgen.net/bundlephobia/minzip/guu)](https://www.npmjs.com/package/guu)
@@ -24,9 +23,9 @@ yarn add guu
 Each time you instantiate `guu`, you can specify the namespace and a color.
 
 ```js
-import guu from 'guu'
+import Guu from 'guu'
 
-const log = new guu('main', '#3e3240');
+const log = new Guu('main', '#3e3240');
 log.info('hello world');
 // prints pretty log
 ```

@@ -1,22 +1,30 @@
-import guu, { LoggerFactory, Logger, TimerFactory } from '../src';
+import Guu, { LoggerFactory, Logger, TimerFactory } from '../src';
 import { delay } from '../src/utils';
 
 describe('guu', () => {
   describe('Logger', () => {
     it('initializes', () => {
-      const logger = new guu('test', '#3e3240');
+      const logger = new Guu('test', '#3e3240');
       expect(logger).toBeDefined();
       expect(logger).toBeInstanceOf(LoggerFactory);
       expect(logger.instance).toBeInstanceOf(Logger);
     });
+
     it('uses the cached namespace version', () => {
-      const logger = new guu('test', '#3e3240');
-      const logger2 = new guu('test', '#3e3240');
+      const logger = new Guu('test', '#3e3240');
+      const logger2 = new Guu('test', '#3e3240');
       expect(logger2).toBeDefined();
       expect(logger).toBeDefined();
     });
+    it('logs', async () => {
+      const spy = jest.spyOn(LoggerFactory.prototype, 'log');
+      const logger = new Guu('test', '#3e3240');
+      logger.log('Hey');
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
   });
-  describe('timer', () => {
+
+  describe('TimerFactory', () => {
     it('initializes', () => {
       const myTimer = new TimerFactory('test');
       expect(myTimer.id).toBe('test');
