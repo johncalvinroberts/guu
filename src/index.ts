@@ -217,43 +217,43 @@ export class LoggerFactory implements Interface<Logger> {
   }
 
   log(...args: Message) {
-    if (!logLevel.includes(ConsoleMethodEnum.log) || !LOG_ALL) {
+    if (!logLevel.includes(ConsoleMethodEnum.log) && !LOG_ALL) {
       return;
     }
     return this.instance.log(args);
   }
   trace(...args: Message) {
-    if (!logLevel.includes(ConsoleMethodEnum.trace) || !LOG_ALL) {
+    if (!logLevel.includes(ConsoleMethodEnum.trace) && !LOG_ALL) {
       return;
     }
     return this.instance.trace(args);
   }
   error(...args: Message) {
-    if (!logLevel.includes(ConsoleMethodEnum.error) || !LOG_ALL) {
+    if (!logLevel.includes(ConsoleMethodEnum.error) && !LOG_ALL) {
       return;
     }
     return this.instance.error(args);
   }
   info(...args: Message) {
-    if (!logLevel.includes(ConsoleMethodEnum.info) || !LOG_ALL) {
+    if (!logLevel.includes(ConsoleMethodEnum.info) && !LOG_ALL) {
       return;
     }
     return this.instance.info(args);
   }
   warn(...args: Message) {
-    if (!logLevel.includes(ConsoleMethodEnum.warn) || !LOG_ALL) {
+    if (!logLevel.includes(ConsoleMethodEnum.warn) && !LOG_ALL) {
       return;
     }
     return this.instance.warn(args);
   }
   debug(...args: Message) {
-    if (!logLevel.includes(ConsoleMethodEnum.debug) || !LOG_ALL) {
+    if (!logLevel.includes(ConsoleMethodEnum.debug) && !LOG_ALL) {
       return;
     }
     return this.instance.debug(args);
   }
   table(...args: Message) {
-    if (!logLevel.includes(ConsoleMethodEnum.table) || !LOG_ALL) {
+    if (!logLevel.includes(ConsoleMethodEnum.table) && !LOG_ALL) {
       return;
     }
     return this.instance.table(args);
