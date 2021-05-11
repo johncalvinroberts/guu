@@ -204,8 +204,9 @@ export class LoggerFactory implements Interface<Logger> {
       !namespaceLevel.includes(namespace);
     let instance: Logger | DecoyLogger = loggerCache[namespace];
 
-    if (instance && !isSilent) {
+    if (!instance && !isSilent) {
       instance = new Logger(namespace, color);
+      loggerCache[namespace] = instance;
     }
 
     if (isSilent) {

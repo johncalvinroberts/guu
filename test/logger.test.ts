@@ -15,6 +15,10 @@ describe('guu', () => {
       const logger2 = new Guu('test', '#3e3240');
       expect(logger2).toBeDefined();
       expect(logger).toBeDefined();
+      expect(logger).toBeInstanceOf(LoggerFactory);
+      expect(logger2).toBeInstanceOf(LoggerFactory);
+      expect(logger2.instance === logger.instance).toBeTruthy();
+      // expect(spy).toHaveBeenCalledTimes(1);
     });
     it('logs', async () => {
       const spy = jest.spyOn(LoggerFactory.prototype, 'log');
