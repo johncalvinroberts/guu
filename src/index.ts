@@ -1,28 +1,8 @@
 import { getTimeStamp, isObject } from './utils';
 
-const consoleObj: Record<ConsoleMethodEnum, any> = console;
-const loggerCache: Record<string, Logger> = {};
-const timerCache: Record<string, any> = {};
-
-const ALL_LEVELS = '*';
-const rawLogNamespaceLevel = process?.env?.GUU_LOG_NAMESPACES || ALL_LEVELS;
-const namespaceLevel = rawLogNamespaceLevel.split(',');
-const rawLogLevel = process?.env?.GUU_LOG_LEVELS || ALL_LEVELS;
-const logLevel = rawLogLevel.split(',');
-
-const LOG_ALL: boolean = logLevel.includes(ALL_LEVELS);
-
-const getNameSpace = (namespace: string, color: string): string[] => [
-  `%c[${namespace}]`,
-  `color: ${color}; font-weight: bold;`,
-];
-
-const LOG_LEVEL_STYLES = {
-  error: `color: red; font-weight: bold;`,
-  info: `color: white;`,
-  warn: `color: goldenrod;`,
-};
-
+/**
+ * types
+ */
 type Interface<T> = {
   [P in keyof T]: T[P];
 };
@@ -44,6 +24,35 @@ interface Crumb {
   elapsedTime: number;
   totalTime: number;
 }
+
+const consoleObj: Record<ConsoleMethodEnum, any> = console;
+const loggerCache: Record<string, Logger> = {};
+const timerCache: Record<string, any> = {};
+
+/**
+ * constants
+ */
+const ALL_LEVELS = '*';
+const NAMESPACE_LEVEL =
+  process?.env?.GUU_LOG_NAMESPACES?.split(',') ?? ALL_LEVELS;
+const LOG_LEVEL = process?.env?.GUU_LOG_LEVELS?.split(',') || ALL_LEVELS;
+
+const LOG_ALL: boolean = LOG_LEVEL.includes(ALL_LEVELS);
+
+const getNameSpace = (namespace: string, color: string): string[] => [
+  `%c[${namespace}]`,
+  `color: ${color}; font-weight: bold;`,
+];
+
+const LOG_LEVEL_STYLES = {
+  error: `color: red; font-weight: bold;`,
+  info: `color: white;`,
+  warn: `color: goldenrod;`,
+};
+
+/**
+ * Timer util
+ */
 class Timer {
   id: string;
   private crumbs: Crumb[];
@@ -200,8 +209,8 @@ export class LoggerFactory implements Interface<Logger> {
   isSilent: boolean;
   constructor(namespace: string, color: string) {
     const isSilent =
-      !namespaceLevel.includes(ALL_LEVELS) &&
-      !namespaceLevel.includes(namespace);
+      !NAMESPACE_LEVEL.includes(ALL_LEVELS) &&
+      !NAMESPACE_LEVEL.includes(namespace);
     let instance: Logger | DecoyLogger = loggerCache[namespace];
 
     if (!instance && !isSilent) {
@@ -217,43 +226,43 @@ export class LoggerFactory implements Interface<Logger> {
   }
 
   log(...args: Message) {
-    if (!logLevel.includes(ConsoleMethodEnum.log) && !LOG_ALL) {
+    if (!LOG_LEVEL.includes(ConsoleMethodEnum.log) && !LOG_ALL) {
       return;
     }
     return this.instance.log(args);
   }
   trace(...args: Message) {
-    if (!logLevel.includes(ConsoleMethodEnum.trace) && !LOG_ALL) {
+    if (!LOG_LEVEL.includes(ConsoleMethodEnum.trace) && !LOG_ALL) {
       return;
     }
     return this.instance.trace(args);
   }
   error(...args: Message) {
-    if (!logLevel.includes(ConsoleMethodEnum.error) && !LOG_ALL) {
+    if (!LOG_LEVEL.includes(ConsoleMethodEnum.error) && !LOG_ALL) {
       return;
     }
     return this.instance.error(args);
   }
   info(...args: Message) {
-    if (!logLevel.includes(ConsoleMethodEnum.info) && !LOG_ALL) {
+    if (!LOG_LEVEL.includes(ConsoleMethodEnum.info) && !LOG_ALL) {
       return;
     }
     return this.instance.info(args);
   }
   warn(...args: Message) {
-    if (!logLevel.includes(ConsoleMethodEnum.warn) && !LOG_ALL) {
+    if (!LOG_LEVEL.includes(ConsoleMethodEnum.warn) && !LOG_ALL) {
       return;
     }
     return this.instance.warn(args);
   }
   debug(...args: Message) {
-    if (!logLevel.includes(ConsoleMethodEnum.debug) && !LOG_ALL) {
+    if (!LOG_LEVEL.includes(ConsoleMethodEnum.debug) && !LOG_ALL) {
       return;
     }
     return this.instance.debug(args);
   }
   table(...args: Message) {
-    if (!logLevel.includes(ConsoleMethodEnum.table) && !LOG_ALL) {
+    if (!LOG_LEVEL.includes(ConsoleMethodEnum.table) && !LOG_ALL) {
       return;
     }
     return this.instance.table(args);
