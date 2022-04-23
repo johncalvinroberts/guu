@@ -1,4 +1,4 @@
-import { getTimeStamp, isObject } from './utils';
+import { getTimeStamp, isObject, getEnv } from './utils';
 
 /**
  * types
@@ -33,12 +33,10 @@ const timerCache: Record<string, any> = {};
  * constants
  */
 const ALL_LEVELS = '*';
-const NAMESPACE_LEVEL =
-  process?.env?.GUU_LOG_NAMESPACES?.split(',') ?? ALL_LEVELS;
-const LOG_LEVEL = process?.env?.GUU_LOG_LEVELS?.split(',') || ALL_LEVELS;
-
+const env = getEnv();
+const NAMESPACE_LEVEL = env?.GUU_LOG_NAMESPACES?.split(',') || ALL_LEVELS;
+const LOG_LEVEL = env?.GUU_LOG_LEVELS?.split(',') || ALL_LEVELS;
 const LOG_ALL: boolean = LOG_LEVEL.includes(ALL_LEVELS);
-
 const getNameSpace = (namespace: string, color: string): string[] => [
   `%c[${namespace}]`,
   `color: ${color}; font-weight: bold;`,
@@ -146,6 +144,7 @@ export class Logger {
       timestampString
     );
     const logStyles = [
+      // @ts-ignore
       ...this.buildLogStyles(timestampStyle),
       logLevelStyles || '',
     ];

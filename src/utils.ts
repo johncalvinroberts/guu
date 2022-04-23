@@ -38,3 +38,11 @@ export const getTimeStamp = () => {
 
 export const delay = (ms: number) =>
   new Promise(resolve => setTimeout(resolve, ms));
+
+export const getEnv = () => {
+  if (typeof process !== 'undefined') return process.env;
+  // modern bundlers sometimes use import.meta to store environment variables
+  // @ts-ignore
+  if (typeof import.meta?.['env'] !== undefined) return import.meta?.['env'];
+  return {};
+};
