@@ -37,7 +37,7 @@ You can also use different console methods, in a sense supporting "log levels" l
 
 try {
   log.warn('There\'s gonna be an error');
-  throw new Error('Somethin broke.');
+  throw new Error('Somethin\' broke.');
 } catch {
   log.error(error);
 }
@@ -54,7 +54,7 @@ try {
 
 ## Timer Util
 
-`guu` also has a built i timer util, for profiling things in your code.
+`guu` also has a built in timer util, for profiling things in your code.
 
 ```js
 import { TimerFactory } from 'guu';
